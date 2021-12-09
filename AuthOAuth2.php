@@ -92,64 +92,81 @@ class AuthOAuth2 extends AuthPluginBase {
 				'label' => 'Create new users',
 				'default' => false,
 			],
-			'autocreate_permissions' => [
-				'type' => 'json',
-				'label' => 'Global permissions for new users',
-				'editorOptions'=>array('mode'=>'tree'),
-				'default' => json_encode([
-					'users' => [
-						'create' => false,
-						'read' => false,
-						'update' => false,
-						'delete' => false,
-					],
-					'usergroups' => [
-						'create' => false,
-						'read' => false,
-						'update' => false,
-						'delete' => false,
-					],
-					'labelsets' => [
-						'create' => false,
-						'read' => false,
-						'update' => false,
-						'delete' => false,
-						'import' => false,
-						'export' => false,
-					],
-					'templates' => [
-						'create' => false,
-						'read' => false,
-						'update' => false,
-						'delete' => false,
-						'import' => false,
-						'export' => false,
-					],
-					'settings' => [
-						'read' => false,
-						'update' => false,
-						'import' => false,
-					],
-					'surveys' => [
-						'create' => false,
-						'read' => false,
-						'update' => false,
-						'delete' => false,
-						'export' => false,
-					],
-					'participantpanel' => [
-						'create' => false,
-						'read' => false,
-						'update' => false,
-						'delete' => false,
-						'import' => false,
-						'export' => false,
-					],
-					'auth_db' => [
-						'read' => false,
-					],
-				]),
-			],
+		];
+
+		if (method_exists(Permissiontemplates::class, 'applyToUser')) {
+			$roles = [];
+			foreach (Permissiontemplates::model()->findAll() as $role) {
+				$roles[$role->ptid] = $role->name;
+			}
+
+			$this->settings['autocreate_roles'] = [
+				'type' => 'select',
+				'label' => 'Global roles for new users',
+				'options' => $roles,
+				'htmlOptions' => [
+					'multiple' => true
+				],
+			];
+		}
+
+		$this->settings['autocreate_permissions'] = [
+			'type' => 'json',
+			'label' => 'Global permissions for new users',
+			'editorOptions'=>array('mode'=>'tree'),
+			'default' => json_encode([
+				'users' => [
+					'create' => false,
+					'read' => false,
+					'update' => false,
+					'delete' => false,
+				],
+				'usergroups' => [
+					'create' => false,
+					'read' => false,
+					'update' => false,
+					'delete' => false,
+				],
+				'labelsets' => [
+					'create' => false,
+					'read' => false,
+					'update' => false,
+					'delete' => false,
+					'import' => false,
+					'export' => false,
+				],
+				'templates' => [
+					'create' => false,
+					'read' => false,
+					'update' => false,
+					'delete' => false,
+					'import' => false,
+					'export' => false,
+				],
+				'settings' => [
+					'read' => false,
+					'update' => false,
+					'import' => false,
+				],
+				'surveys' => [
+					'create' => false,
+					'read' => false,
+					'update' => false,
+					'delete' => false,
+					'export' => false,
+				],
+				'participantpanel' => [
+					'create' => false,
+					'read' => false,
+					'update' => false,
+					'delete' => false,
+					'import' => false,
+					'export' => false,
+				],
+				'auth_db' => [
+					'read' => false,
+				],
+			]),
 		];
 	}
 
@@ -273,6 +290,12 @@ class AuthOAuth2 extends AuthPluginBase {
 			$defaultPermissions = json_decode($this->get('autocreate_permissions', null, null, []), true);
 			if (!empty($defaultPermissions)) {
 				Permission::setPermissions($user->uid, 0, 'global', $defaultPermissions, true);
+			}
+
+			if (method_exists(Permissiontemplates::class, 'applyToUser')) {
+				foreach ($this->get('autocreate_roles', null, null, []) as $role) {
+					Permissiontemplates::model()->applyToUser($user->uid, $role);
+				}
 			}
 		}
 
