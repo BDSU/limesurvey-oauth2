@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<metadata>
+		<name>AuthOAuth2</name>
+		<type>plugin</type>
+		<creationDate>2021-12-09</creationDate>
+		<lastUpdate>2021-12-09</lastUpdate>
+		<author>Roman Anasal</author>
+		<authorUrl>https://github.com/BDSU/limesurvey-oauth2</authorUrl>
+		<version>1.0.0</version>
+		<license>MIT</license>
+		<description><![CDATA[Enable Single Sign-On using OAuth2]]></description>
+	</metadata>
+
+	<compatibility>
+		<version>5.0</version>
+		<version>4.0</version>
+		<version>3.0</version>
+	</compatibility>
+
+	<updaters disabled="disabled">
+	</updaters>
+</config>
