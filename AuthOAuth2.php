@@ -92,6 +92,64 @@ class AuthOAuth2 extends AuthPluginBase {
 				'label' => 'Create new users',
 				'default' => false,
 			],
+			'autocreate_permissions' => [
+				'type' => 'json',
+				'label' => 'Global permissions for new users',
+				'editorOptions'=>array('mode'=>'tree'),
+				'default' => json_encode([
+					'users' => [
+						'create' => false,
+						'read' => false,
+						'update' => false,
+						'delete' => false,
+					],
+					'usergroups' => [
+						'create' => false,
+						'read' => false,
+						'update' => false,
+						'delete' => false,
+					],
+					'labelsets' => [
+						'create' => false,
+						'read' => false,
+						'update' => false,
+						'delete' => false,
+						'import' => false,
+						'export' => false,
+					],
+					'templates' => [
+						'create' => false,
+						'read' => false,
+						'update' => false,
+						'delete' => false,
+						'import' => false,
+						'export' => false,
+					],
+					'settings' => [
+						'read' => false,
+						'update' => false,
+						'import' => false,
+					],
+					'surveys' => [
+						'create' => false,
+						'read' => false,
+						'update' => false,
+						'delete' => false,
+						'export' => false,
+					],
+					'participantpanel' => [
+						'create' => false,
+						'read' => false,
+						'update' => false,
+						'delete' => false,
+						'import' => false,
+						'export' => false,
+					],
+					'auth_db' => [
+						'read' => false,
+					],
+				]),
+			],
 		];
 	}
 
@@ -210,6 +268,11 @@ class AuthOAuth2 extends AuthPluginBase {
 
 			if (!$user->save()) {
 				throw new CHttpException(401, 'Failed to create new user');
+			}
+
+			$defaultPermissions = json_decode($this->get('autocreate_permissions', null, null, []), true);
+			if (!empty($defaultPermissions)) {
+				Permission::setPermissions($user->uid, 0, 'global', $defaultPermissions, true);
 			}
 		}
 
