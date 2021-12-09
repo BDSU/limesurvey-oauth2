@@ -42,6 +42,15 @@ class AuthOAuth2 extends AuthPluginBase {
 			'type' => 'string',
 			'label' => 'User Details URL',
 		],
+		'identifier_attribute' => [
+			'type' => 'select',
+			'label' => 'Identifier Attribute',
+			'options' => [
+				'username' => 'Username',
+				'email' => 'E-Mail',
+			],
+			'default' => 'username',
+		],
 		'username_key' => [
 			'type' => 'string',
 			'label' => 'Key for username in user details',
@@ -112,13 +121,18 @@ class AuthOAuth2 extends AuthPluginBase {
 			throw new CHttpException(401, 'Failed to retrieve user details');
 		}
 
-		$identifierKey = $this->get('username_key');
+		if ($this->get('identifier_attribute') === 'email') {
+			$identifierKey = $this->get('email_key');
+		} else {
+			$identifierKey = $this->get('username_key');
+		}
+
 		if (empty($this->resourceData[$identifierKey])) {
 			throw new CHttpException(401, 'User identifier not found or empty');
 		}
 
-		$username = $this->resourceData[$identifierKey];
-		$this->setUsername($username);
+		$userIdentifier = $this->resourceData[$identifierKey];
+		$this->setUsername($userIdentifier);
 		$this->setAuthPlugin();
 	}
 
@@ -128,8 +142,13 @@ class AuthOAuth2 extends AuthPluginBase {
 			return;
 		}
 
-		$username = $this->getUserName();
-		$user = $this->api->getUserByName($username);
+		$userIdentifier = $this->getUserName();
+		if ($this->get('identifier_attribute') === 'email') {
+			$user = $this->api->getUserByEmail($userIdentifier);
+		} else {
+			$user = $this->api->getUserByName($userIdentifier);
+		}
+
 		if (!$user && !$this->get('autocreate_users')) {
 			// we don't use setAuthFailure() here because if we are the active auth
 			// the error is never shown to the user but instead the user is redirected
@@ -158,6 +177,7 @@ class AuthOAuth2 extends AuthPluginBase {
 			}
 		}
 
+		$this->setUsername($user->users_name);
 		$this->setAuthSuccess($user);
 	}
 }
