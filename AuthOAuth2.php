@@ -4,6 +4,7 @@ use League\OAuth2\Client\Provider\GenericProvider;
 use LimeSurvey\PluginManager\AuthPluginBase;
 use LimeSurvey\PluginManager\LimesurveyApi;
 use LimeSurvey\PluginManager\PluginEvent;
+use LimeSurvey\PluginManager\PluginManager;
 
 require_once(__DIR__ . '/vendor/autoload.php');
 
@@ -16,59 +17,78 @@ class AuthOAuth2 extends AuthPluginBase {
 
 	protected $resourceData = [];
 
-	protected $settings = [
-		'client_id' => [
-			'type' => 'string',
-			'label' => 'Client ID',
-		],
-		'client_secret' => [
-			'type' => 'string',
-			'label' => 'Client Secret',
-		],
-		'authorize_url' => [
-			'type' => 'string',
-			'label' => 'Authorize URL',
-		],
-		'scopes' => [
-			'type' => 'string',
-			'label' => 'Scopes',
-			'help' => 'Comma-separated list of scopes',
-		],
-		'access_token_url' => [
-			'type' => 'string',
-			'label' => 'Access Token URL',
-		],
-		'resource_owner_details_url' => [
-			'type' => 'string',
-			'label' => 'User Details URL',
-		],
-		'identifier_attribute' => [
-			'type' => 'select',
-			'label' => 'Identifier Attribute',
-			'options' => [
-				'username' => 'Username',
-				'email' => 'E-Mail',
+	protected $settings = [];
+
+	public function __construct(PluginManager $manager, $id) {
+		parent::__construct($manager, $id);
+
+		$this->settings = [
+			'client_id' => [
+				'type' => 'string',
+				'label' => 'Client ID',
 			],
-			'default' => 'username',
-		],
-		'username_key' => [
-			'type' => 'string',
-			'label' => 'Key for username in user details',
-		],
-		'email_key' => [
-			'type' => 'string',
-			'label' => 'Key for e-mail in user details',
-		],
-		'display_name_key' => [
-			'type' => 'string',
-			'label' => 'Key for display name in user details',
-		],
-		'autocreate_users' => [
-			'type' => 'checkbox',
-			'label' => 'Create new users',
-			'default' => false,
-		],
-	];
+			'client_secret' => [
+				'type' => 'string',
+				'label' => 'Client Secret',
+			],
+			'redirect_uri' => [
+				'type' => 'info',
+				'label' => 'Redirect URI',
+				'content' => CHtml::tag(
+					'input',
+					[
+						'type' => 'text',
+						'class' => 'form-control',
+						'readonly' => true,
+						'value' => $this->api->createUrl('admin/authentication/sa/login', []),
+					]
+				),
+			],
+			'authorize_url' => [
+				'type' => 'string',
+				'label' => 'Authorize URL',
+			],
+			'scopes' => [
+				'type' => 'string',
+				'label' => 'Scopes',
+				'help' => 'Comma-separated list of scopes',
+			],
+			'access_token_url' => [
+				'type' => 'string',
+				'label' => 'Access Token URL',
+			],
+			'resource_owner_details_url' => [
+				'type' => 'string',
+				'label' => 'User Details URL',
+			],
+			'identifier_attribute' => [
+				'type' => 'select',
+				'label' => 'Identifier Attribute',
+				'options' => [
+					'username' => 'Username',
+					'email' => 'E-Mail',
+				],
+				'default' => 'username',
+			],
+			'username_key' => [
+				'type' => 'string',
+				'label' => 'Key for username in user details',
+			],
+			'email_key' => [
+				'type' => 'string',
+				'label' => 'Key for e-mail in user details',
+			],
+			'display_name_key' => [
+				'type' => 'string',
+				'label' => 'Key for display name in user details',
+			],
+			'autocreate_users' => [
+				'type' => 'checkbox',
+				'label' => 'Create new users',
+				'default' => false,
+			],
+		];
+	}
 
 	public function init() {
 		$this->subscribe('beforeLogin');
