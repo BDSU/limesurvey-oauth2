@@ -1,0 +1,10 @@
+{
+    "name": "bdsu/limesurvey-oauth2",
+    "description": "Enable Single Sign-On for LimeSurvey using OAuth2",
+    "type": "library",
+    "require": {
+        "php": ">=5.6",
+        "league/oauth2-client": "^2.6"
+    },
+    "license": "MIT"
+}
