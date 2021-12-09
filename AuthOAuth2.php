@@ -14,6 +14,8 @@ class AuthOAuth2 extends AuthPluginBase {
 	static protected $name = 'OAuth2 Authentication';
 	static protected $description = 'Enable Single Sign-On using OAuth2';
 
+	protected $resourceData = [];
+
 	protected $settings = [
 		'client_id' => [
 			'type' => 'string',
@@ -43,6 +45,19 @@ class AuthOAuth2 extends AuthPluginBase {
 		'username_key' => [
 			'type' => 'string',
 			'label' => 'Key for username in user details',
+		],
+		'email_key' => [
+			'type' => 'string',
+			'label' => 'Key for e-mail in user details',
+		],
+		'display_name_key' => [
+			'type' => 'string',
+			'label' => 'Key for display name in user details',
+		],
+		'autocreate_users' => [
+			'type' => 'checkbox',
+			'label' => 'Create new users',
+			'default' => false,
 		],
 	];
 
@@ -92,17 +107,17 @@ class AuthOAuth2 extends AuthPluginBase {
 
 		try {
 			$resourceOwner = $provider->getResourceOwner($accessToken);
-			$resourceData = $resourceOwner->toArray();
+			$this->resourceData = $resourceOwner->toArray();
 		} catch (Throwable $exception) {
 			throw new CHttpException(401, 'Failed to retrieve user details');
 		}
 
 		$identifierKey = $this->get('username_key');
-		if (empty($resourceData[$identifierKey])) {
+		if (empty($this->resourceData[$identifierKey])) {
 			throw new CHttpException(401, 'User identifier not found or empty');
 		}
 
-		$username = $resourceData[$identifierKey];
+		$username = $this->resourceData[$identifierKey];
 		$this->setUsername($username);
 		$this->setAuthPlugin();
 	}
@@ -115,11 +130,32 @@ class AuthOAuth2 extends AuthPluginBase {
 
 		$username = $this->getUserName();
 		$user = $this->api->getUserByName($username);
-		if (!$user) {
+		if (!$user && !$this->get('autocreate_users')) {
 			// we don't use setAuthFailure() here because if we are the active auth
 			// the error is never shown to the user but instead the user is redirected
 			// again, possibly resulting in a redirect loop
 			throw new CHttpException(401, 'User not found in LimeSurvey');
+		}
+
+		if (!$user) {
+			$usernameKey = $this->get('username_key');
+			$displayNameKey = $this->get('display_name_key');
+			$emailKey = $this->get('email_key');
+			if (empty($this->resourceData[$usernameKey]) || empty($this->resourceData[$displayNameKey]) || empty($this->resourceData[$emailKey])) {
+				throw new CHttpException(401, 'User data is missing required attributes to create new user');
+			}
+
+			$user = new User();
+			$user->parent_id = 1;
+			$user->setPassword(createPassword());
+
+			$user->users_name = $this->resourceData[$usernameKey];
+			$user->full_name = $this->resourceData[$displayNameKey];
+			$user->email = $this->resourceData[$emailKey];
+
+			if (!$user->save()) {
+				throw new CHttpException(401, 'Failed to create new user');
+			}
 		}
 
 		$this->setAuthSuccess($user);
