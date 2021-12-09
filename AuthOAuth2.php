@@ -82,6 +82,11 @@ class AuthOAuth2 extends AuthPluginBase {
 				'type' => 'string',
 				'label' => 'Key for display name in user details',
 			],
+			'is_default' => [
+				'type' => 'checkbox',
+				'label' => 'Use as default login',
+				'default' => false,
+			],
 			'autocreate_users' => [
 				'type' => 'checkbox',
 				'label' => 'Create new users',
@@ -93,6 +98,12 @@ class AuthOAuth2 extends AuthPluginBase {
 	public function init() {
 		$this->subscribe('beforeLogin');
 		$this->subscribe('newUserSession');
+		$this->subscribe('newLoginForm');
+	}
+
+	public function newLoginForm() {
+		// we need to add content to be added to the auth method selection
+		$this->getEvent()->getContent($this)->addContent('');
 	}
 
 	public function beforeLogin() {
@@ -113,6 +124,11 @@ class AuthOAuth2 extends AuthPluginBase {
 		]);
 
 		$code = $request->getParam('code');
+		$defaultAuth = $this->get('is_default') ? self::class : null;
+		if (empty($code) && $request->getParam('authMethod', $defaultAuth) !== self::class) {
+			return;
+		}
+
 		if (empty($code)) {
 			$authorizationUrl = $provider->getAuthorizationUrl();
 			Yii::app()->session->add(self::SESSION_STATE_KEY, $provider->getState());
@@ -157,12 +173,12 @@ class AuthOAuth2 extends AuthPluginBase {
 	}
 
 	public function newUserSession() {
+		$userIdentifier = $this->getUserName();
 		$identity = $this->getEvent()->get('identity');
-		if ($identity->plugin != self::class) {
+		if ($identity->plugin != self::class || $identity->username !== $userIdentifier) {
 			return;
 		}
 
-		$userIdentifier = $this->getUserName();
 		if ($this->get('identifier_attribute') === 'email') {
 			$user = $this->api->getUserByEmail($userIdentifier);
 		} else {
