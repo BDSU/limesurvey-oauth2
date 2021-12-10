@@ -25,15 +25,15 @@ class AuthOAuth2 extends AuthPluginBase {
 		$this->settings = [
 			'client_id' => [
 				'type' => 'string',
-				'label' => 'Client ID',
+				'label' => $this->gT('Client ID'),
 			],
 			'client_secret' => [
 				'type' => 'string',
-				'label' => 'Client Secret',
+				'label' => $this->gT('Client Secret'),
 			],
 			'redirect_uri' => [
 				'type' => 'info',
-				'label' => 'Redirect URI',
+				'label' => $this->gT('Redirect URI'),
 				'content' => CHtml::tag(
 					'input',
 					[
@@ -46,60 +46,61 @@ class AuthOAuth2 extends AuthPluginBase {
 			],
 			'authorize_url' => [
 				'type' => 'string',
-				'label' => 'Authorize URL',
+				'label' => $this->gT('Authorize URL'),
 			],
 			'scopes' => [
 				'type' => 'string',
-				'label' => 'Scopes',
-				'help' => 'Comma-separated list of scopes to use for authorization.',
+				'label' => $this->gT('Scopes'),
+				'help' => $this->gT('Comma-separated list of scopes to use for authorization.'),
 			],
 			'access_token_url' => [
 				'type' => 'string',
-				'label' => 'Access Token URL',
+				'label' => $this->gT('Access Token URL'),
 			],
 			'resource_owner_details_url' => [
 				'type' => 'string',
-				'label' => 'User Details URL',
-				'help' => 'URL to load the user details from using the retrieved access token.',
+				'label' => $this->gT('User Details URL'),
+				'help' => $this->gT('URL to load the user details from using the retrieved access token.'),
 			],
 			'identifier_attribute' => [
 				'type' => 'select',
-				'label' => 'Identifier Attribute',
-				'help' => 'Attribute of the LimeSurvey user to match against.',
+				'label' => $this->gT('Identifier Attribute'),
+				'help' => $this->gT('Attribute of the LimeSurvey user to match against.'),
 				'options' => [
-					'username' => 'Username',
-					'email' => 'E-Mail',
+					'username' => $this->gT('Username'),
+					'email' => $this->gT('E-Mail'),
 				],
 				'default' => 'username',
 			],
 			'username_key' => [
 				'type' => 'string',
-				'label' => 'Key for username in user details',
-				'help' => 'Key for the username in the user details data. Only required if used as "Identifier Attibute" or if "Create new users" is enabled.',
+				'label' => $this->gT('Key for username in user details'),
+				'help' => $this->gT('Key for the username in the user details data. Only required if used as "Identifier Attibute" or if "Create new users" is enabled.'),
 			],
 			'email_key' => [
 				'type' => 'string',
-				'label' => 'Key for e-mail in user details',
-				'help' => 'Key for the e-mail in the user details data. Only required if used as "Identifier Attibute" or if "Create new users" is enabled.',
+				'label' => $this->gT('Key for e-mail in user details'),
+				'help' => $this->gT('Key for the e-mail in the user details data. Only required if used as "Identifier Attibute" or if "Create new users" is enabled.'),
 			],
 			'display_name_key' => [
 				'type' => 'string',
-				'label' => 'Key for display name in user details',
-				'help' => 'Key for the full name in the user details data. Only required if "Create new users" is enabled.',
+				'label' => $this->gT('Key for display name in user details'),
+				'help' => $this->gT('Key for the full name in the user details data. Only required if "Create new users" is enabled.'),
 			],
 			'is_default' => [
 				'type' => 'checkbox',
-				'label' => 'Use as default login',
+				'label' => $this->gT('Use as default login'),
 				'help' => sprintf(
-					'If enabled instead of showing the LimeSurvey login the user is redirected directly to the OAuth2 login. The default login form can always be accessed via:<br>%s',
+					'%s<br>%s',
+					$this->gT('If enabled instead of showing the LimeSurvey login the user is redirected directly to the OAuth2 login. The default login form can always be accessed via:'),
 					htmlspecialchars($this->api->createUrl('admin/authentication/sa/login', ['authMethod' => 'Authdb']))
 				),
 				'default' => false,
 			],
 			'autocreate_users' => [
 				'type' => 'checkbox',
-				'label' => 'Create new users',
-				'help' => 'If enabled users that do not exist yet will be created in LimeSurvey after successfull login.',
+				'label' => $this->gT('Create new users'),
+				'help' => $this->gT('If enabled users that do not exist yet will be created in LimeSurvey after successfull login.'),
 				'default' => false,
 			],
 		];
@@ -112,8 +113,8 @@ class AuthOAuth2 extends AuthPluginBase {
 
 			$this->settings['autocreate_roles'] = [
 				'type' => 'select',
-				'label' => 'Global roles for new users',
-				'help' => 'Global user roles to be assigned to users that are automatically created.',
+				'label' => $this->gT('Global roles for new users'),
+				'help' => $this->gT('Global user roles to be assigned to users that are automatically created.'),
 				'options' => $roles,
 				'htmlOptions' => [
 					'multiple' => true
@@ -123,9 +124,9 @@ class AuthOAuth2 extends AuthPluginBase {
 
 		$this->settings['autocreate_permissions'] = [
 			'type' => 'json',
-			'label' => 'Global permissions for new users',
+			'label' => $this->gT('Global permissions for new users'),
 			'help' => sprintf(
-				'A JSON object describing the default permissions to be assigned to users that are automatically created. The JSON object has the follwing form: %s',
+				$this->gT('A JSON object describing the default permissions to be assigned to users that are automatically created. The JSON object has the follwing form: %s'),
 				CHtml::tag('pre', [], "{\n\t\"surveys\": { ... },\n\t\"templates\": {\n\t\t\"create\": false,\n\t\t\"read\": false,\n\t\t\"update\": false,\n\t\t\"delete\": false,\n\t\t\"import\": false,\n\t\t\"export\": false,\n\t},\n\t\"users\": { ... },\n\t...\n}")
 			),
 			'editorOptions'=>array('mode'=>'tree'),
@@ -229,7 +230,7 @@ class AuthOAuth2 extends AuthPluginBase {
 		$state = $request->getParam('state');
 		$safedState = Yii::app()->session->get(self::SESSION_STATE_KEY);
 		if ($state !== $safedState) {
-			throw new CHttpException(401, 'Invalid state in OAuth response');
+			throw new CHttpException(401, $this->gT('Invalid state in OAuth response'));
 		}
 
 		Yii::app()->session->remove(self::SESSION_STATE_KEY);
@@ -237,14 +238,14 @@ class AuthOAuth2 extends AuthPluginBase {
 		try {
 			$accessToken = $provider->getAccessToken('authorization_code', ['code' => $code]);
 		} catch (Throwable $exception) {
-			throw new CHttpException(401, 'Failed to retrieve access token');
+			throw new CHttpException(401, $this->gT('Failed to retrieve access token'));
 		}
 
 		try {
 			$resourceOwner = $provider->getResourceOwner($accessToken);
 			$this->resourceData = $resourceOwner->toArray();
 		} catch (Throwable $exception) {
-			throw new CHttpException(401, 'Failed to retrieve user details');
+			throw new CHttpException(401, $this->gT('Failed to retrieve user details'));
 		}
 
 		if ($this->get('identifier_attribute') === 'email') {
@@ -254,7 +255,7 @@ class AuthOAuth2 extends AuthPluginBase {
 		}
 
 		if (empty($this->resourceData[$identifierKey])) {
-			throw new CHttpException(401, 'User identifier not found or empty');
+			throw new CHttpException(401, $this->gT('User identifier not found or empty'));
 		}
 
 		$userIdentifier = $this->resourceData[$identifierKey];
@@ -279,7 +280,7 @@ class AuthOAuth2 extends AuthPluginBase {
 			// we don't use setAuthFailure() here because if we are the active auth
 			// the error is never shown to the user but instead the user is redirected
 			// again, possibly resulting in a redirect loop
-			throw new CHttpException(401, 'User not found in LimeSurvey');
+			throw new CHttpException(401, $this->gT('User not found in LimeSurvey'));
 		}
 
 		if (!$user) {
@@ -287,7 +288,7 @@ class AuthOAuth2 extends AuthPluginBase {
 			$displayNameKey = $this->get('display_name_key');
 			$emailKey = $this->get('email_key');
 			if (empty($this->resourceData[$usernameKey]) || empty($this->resourceData[$displayNameKey]) || empty($this->resourceData[$emailKey])) {
-				throw new CHttpException(401, 'User data is missing required attributes to create new user');
+				throw new CHttpException(401, $this->gT('User data is missing required attributes to create new user'));
 			}
 
 			$user = new User();
@@ -299,7 +300,7 @@ class AuthOAuth2 extends AuthPluginBase {
 			$user->email = $this->resourceData[$emailKey];
 
 			if (!$user->save()) {
-				throw new CHttpException(401, 'Failed to create new user');
+				throw new CHttpException(401, $this->gT('Failed to create new user'));
 			}
 
 			$defaultPermissions = json_decode($this->get('autocreate_permissions', null, null, []), true);
