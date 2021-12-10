@@ -51,7 +51,7 @@ class AuthOAuth2 extends AuthPluginBase {
 			'scopes' => [
 				'type' => 'string',
 				'label' => 'Scopes',
-				'help' => 'Comma-separated list of scopes',
+				'help' => 'Comma-separated list of scopes to use for authorization.',
 			],
 			'access_token_url' => [
 				'type' => 'string',
@@ -60,10 +60,12 @@ class AuthOAuth2 extends AuthPluginBase {
 			'resource_owner_details_url' => [
 				'type' => 'string',
 				'label' => 'User Details URL',
+				'help' => 'URL to load the user details from using the retrieved access token.',
 			],
 			'identifier_attribute' => [
 				'type' => 'select',
 				'label' => 'Identifier Attribute',
+				'help' => 'Attribute of the LimeSurvey user to match against.',
 				'options' => [
 					'username' => 'Username',
 					'email' => 'E-Mail',
@@ -73,23 +75,31 @@ class AuthOAuth2 extends AuthPluginBase {
 			'username_key' => [
 				'type' => 'string',
 				'label' => 'Key for username in user details',
+				'help' => 'Key for the username in the user details data. Only required if used as "Identifier Attibute" or if "Create new users" is enabled.',
 			],
 			'email_key' => [
 				'type' => 'string',
 				'label' => 'Key for e-mail in user details',
+				'help' => 'Key for the e-mail in the user details data. Only required if used as "Identifier Attibute" or if "Create new users" is enabled.',
 			],
 			'display_name_key' => [
 				'type' => 'string',
 				'label' => 'Key for display name in user details',
+				'help' => 'Key for the full name in the user details data. Only required if "Create new users" is enabled.',
 			],
 			'is_default' => [
 				'type' => 'checkbox',
 				'label' => 'Use as default login',
+				'help' => sprintf(
+					'If enabled instead of showing the LimeSurvey login the user is redirected directly to the OAuth2 login. The default login form can always be accessed via:<br>%s',
+					htmlspecialchars($this->api->createUrl('admin/authentication/sa/login', ['authMethod' => 'Authdb']))
+				),
 				'default' => false,
 			],
 			'autocreate_users' => [
 				'type' => 'checkbox',
 				'label' => 'Create new users',
+				'help' => 'If enabled users that do not exist yet will be created in LimeSurvey after successfull login.',
 				'default' => false,
 			],
 		];
@@ -103,6 +113,7 @@ class AuthOAuth2 extends AuthPluginBase {
 			$this->settings['autocreate_roles'] = [
 				'type' => 'select',
 				'label' => 'Global roles for new users',
+				'help' => 'Global user roles to be assigned to users that are automatically created.',
 				'options' => $roles,
 				'htmlOptions' => [
 					'multiple' => true
@@ -113,6 +124,10 @@ class AuthOAuth2 extends AuthPluginBase {
 		$this->settings['autocreate_permissions'] = [
 			'type' => 'json',
 			'label' => 'Global permissions for new users',
+			'help' => sprintf(
+				'A JSON object describing the default permissions to be assigned to users that are automatically created. The JSON object has the follwing form: %s',
+				CHtml::tag('pre', [], "{\n\t\"surveys\": { ... },\n\t\"templates\": {\n\t\t\"create\": false,\n\t\t\"read\": false,\n\t\t\"update\": false,\n\t\t\"delete\": false,\n\t\t\"import\": false,\n\t\t\"export\": false,\n\t},\n\t\"users\": { ... },\n\t...\n}")
+			),
 			'editorOptions'=>array('mode'=>'tree'),
 			'default' => json_encode([
 				'users' => [
