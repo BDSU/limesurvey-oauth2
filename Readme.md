@@ -42,6 +42,8 @@ select OAuth2 as authentication method manually.
 Below the _Use as default login_ checkbox a URL is shown with which the default login form can always be accessed
 to login using the internal database even when automatic redirection is enabled.
 
+You can find [a configuration example for Azure Active Directory here](docs/examples/AzureAD.md).
+
 # Supported LimeSurvey Versions
 
 This plugin was tested with
