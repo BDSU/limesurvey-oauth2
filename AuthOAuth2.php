@@ -309,7 +309,8 @@ class AuthOAuth2 extends AuthPluginBase {
 			}
 
 			if (method_exists(Permissiontemplates::class, 'applyToUser')) {
-				foreach ($this->get('autocreate_roles', null, null, []) as $role) {
+				$autoCreateRoles = (array) $this->get('autocreate_roles', null, null, []);
+				foreach ($autoCreateRoles as $role) {
 					Permissiontemplates::model()->applyToUser($user->uid, $role);
 				}
 			}
