@@ -103,6 +103,20 @@ class AuthOAuth2 extends AuthPluginBase {
 				'help' => $this->gT('If enabled users that do not exist yet will be created in LimeSurvey after successfull login.'),
 				'default' => false,
 			],
+			'introduction_text' => [
+				'type' => 'string',
+				'htmlOptions' => [
+					'placeholder' => $this->gT('Login with Oauth2'),
+				],
+				'label' => $this->gT('Introduction to the OAuth login button.'),
+			],
+			'button_text' => [
+				'type' => 'string',
+				'htmlOptions' => [
+					'placeholder' => $this->gT('Login'),
+				],
+				'label' => $this->gT('Text on login button.'),
+			],
 		];
 
 		if (method_exists(Permissiontemplates::class, 'applyToUser')) {
@@ -193,8 +207,24 @@ class AuthOAuth2 extends AuthPluginBase {
 	}
 
 	public function newLoginForm() {
-		// we need to add content to be added to the auth method selection
-		$this->getEvent()->getContent($this)->addContent('');
+		$oEvent = $this->getEvent();
+		$introductionText = viewHelper::purified(trim($this->get('introduction_text')));
+		if (empty($introductionText)) {
+			$introductionText = $this->gT("Login with Oauth2");
+		}
+		$buttonText = viewHelper::purified(trim($this->get('button_text')));
+		if (empty($buttonText)) {
+			$buttonText = $this->gT("Login");
+		}
+		$aData = [
+			'introductionText' => $introductionText,
+			'buttonText' => $buttonText,
+		];
+		$authContent = $content = $this->renderPartial('admin.authentication.Oauth2LoginButton', $aData, true);
+		$allFromsContent = $oEvent->getAllContent();
+		foreach($allFromsContent as $plugin => $content) {
+			$oEvent->getContent($plugin)->addContent($authContent, 'prepend');
+		}
 	}
 
 	public function beforeLogin() {
