@@ -1,0 +1,101 @@
+msgid "Client ID"
+msgstr "Client ID"
+
+msgid "Client Secret"
+msgstr "Client Secret"
+
+msgid "Redirect URI"
+msgstr "Redirect URI"
+
+msgid "Authorize URL"
+msgstr "Authorize URL"
+
+msgid "Scopes"
+msgstr "Scopes"
+
+msgid "Comma-separated list of scopes to use for authorization."
+msgstr "Liste séparée par des virgules à utiliser pour l'authorisation."
+
+msgid "Access Token URL"
+msgstr "Access Token URL"
+
+msgid "User Details URL"
+msgstr "URL des détails sur l'utilisateur"
+
+msgid "URL to load the user details from using the retrieved access token."
+msgstr "URL pour obtenir les informations sur l'utilisateur grace au token obtenu précédemment"
+
+msgid "Identifier Attribute"
+msgstr "Attribut pour l'identification"
+
+msgid "Attribute of the LimeSurvey user to match against."
+msgstr "Attribut utilisé pour faire correspondre les utilisateurs existants de Limesurvey."
+
+msgid "Username"
+msgstr "Nom de l'utilisateur"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Key for username in user details"
+msgstr "Clé correspondant au nom de l'utilisateur dans les détails sur l'utilisateur"
+
+msgid "Key for the username in the user details data. Only required if used as \"Identifier Attibute\" or if \"Create new users\" is enabled."
+msgstr "Clé pour le nom d'utilisateur. Uniquement nécessaire si \"Attribut pour l'identification\" ou \"Créer des nouveaux utilisateurs\" est activé"
+
+msgid "Key for e-mail in user details"
+msgstr "Clé correspondant à l'email dans les détails sur l'utilisateur"
+
+msgid "Key for the e-mail in the user details data. Only required if used as \"Identifier Attibute\" or if \"Create new users\" is enabled."
+msgstr "Clé correspondant à l'email dans les détails sur l'utilisateur. Uniquement nécessaire si \"Attribut pour l'identification\" ou \"Créer des nouveaux utilisateurs\" est activé"
+
+msgid "Key for display name in user details"
+msgstr "Clé correspondant au nom d'affichage dans les détails sur l'utilisateur"
+
+msgid "Key for the full name in the user details data. Only required if \"Create new users\" is enabled."
+msgstr "Clé correspondant au nom d'affichage dans les détails sur l'utilisateur. Uniquement nécessaire si \"Créer des nouveaux utilisateurs\" est activé"
+
+msgid "Use as default login"
+msgstr "Utiliser comme authentification par défaut"
+
+msgid "If enabled instead of showing the LimeSurvey login the user is redirected directly to the OAuth2 login. The default login form can always be accessed via:"
+msgstr "Si activée, l'utilisateur verra directement le login OAuth en lieu et place de l'authentification classique. L'authentification classique peut être atteinte ici:"
+
+msgid "Create new users"
+msgstr "Créer des nouveaux utilisateurs"
+
+msgid "If enabled users that do not exist yet will be created in LimeSurvey after successfull login."
+msgstr "Si activée, les utilisateurs qui n'existent pas seront créés après une authentification réussie."
+
+msgid "Global roles for new users"
+msgstr "Rôles globaux pour les nouveaux utilisateurs"
+
+msgid "Global user roles to be assigned to users that are automatically created."
+msgstr "Rôles globaux pour les utilisateurs automatiquement créés."
+
+msgid "Global permissions for new users"
+msgstr "Permissions globales pour les nouveaux utilisateurs"
+
+msgid "A JSON object describing the default permissions to be assigned to users that are automatically created. The JSON object has the following form: %s"
+msgstr "Un objet JSSON décrivant les permissions par défaut assignée aux utilisateurs automatiquement créés. L'objet a la forme suivante: %s"
+
+msgid "Invalid state in OAuth response"
+msgstr "État invalide dans la réponse OAuth"
+
+msgid "Failed to retrieve access token"
+msgstr "Impossible d'obtenir un token d'accès"
+
+msgid "Failed to retrieve user details"
+msgstr "Impossible d'obtenir les détails de l'utilisateur"
+
+msgid "User identifier not found or empty"
+msgstr "Les détails de l'utilisateur n'ont pas été trouvés ou sont vides"
+
+msgid "User not found in LimeSurvey"
+msgstr "Impossible de trouver l'utilisateur dans LimeSurvey"
+
+msgid "User data is missing required attributes to create new user"
+msgstr "Des attributs utilisateurs nécessaires sont manquants"
+
+msgid "Failed to create new user"
+msgstr "Impossible de créer un nouvel utilisateur"

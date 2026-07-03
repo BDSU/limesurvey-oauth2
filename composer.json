@@ -1,7 +1,7 @@
 {
     "name": "bdsu/limesurvey-oauth2",
     "description": "Enable Single Sign-On for LimeSurvey using OAuth2",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "type": "library",
     "readme": "Readme.md",
     "homepage": "https://github.com/BDSU/limesurvey-oauth2",
@@ -15,8 +15,8 @@
         "OAuth2"
     ],
     "require": {
-        "php": ">=5.6",
-        "league/oauth2-client": "^2.6"
+        "php": ">=8",
+        "league/oauth2-client": ">=2.6"
     },
     "license": "MIT"
 }

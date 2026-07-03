@@ -19,13 +19,13 @@ include the [`User.Read` permission](https://docs.microsoft.com/en-us/graph/perm
 
 The plugin configuration so far should look like this:
 
-| Option           | Value                                                            |
-|------------------|------------------------------------------------------------------|
-| Client ID        | 4e921cb2-1d8e-460d-a1f6-1b4c549d9361                             |
-| Client Secret    | k9s7Q~klJchT7SKDKuGevSEDGqbi7oBIZL3X1                            |
+| Option           | Value                                                           |
+|------------------|-----------------------------------------------------------------|
+| Client ID        | 4e921cb2-1d8e-460d-a1f6-1b4c549d9361                            |
+| Client Secret    | your_beloved_secret                                            |
 | Authorize URL    | https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize |
-| Scopes           | User.Read                                                        |
-| Access Token URL | https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token     |
+| Scopes           | User.Read                                                       |
+| Access Token URL | https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token    |
 
 ## Configure User Details
 
